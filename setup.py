@@ -10,12 +10,14 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
 
 requires = [
     'webargs',
+    'marshmallow',
+    'requests'
 ]
 
 
-setup(name='webargs-client',
+setup(name='webargsclient',
       version='0.1',
-      description='webargs-client',
+      description='webargsclient',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
         "Programming Language :: Python",
