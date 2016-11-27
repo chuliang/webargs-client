@@ -13,12 +13,13 @@ class TestClient(unittest.TestCase):
 
     def test_inject_kwargs(self):
         @decorators.inject_kwargs({})
-        def test(self, params, data):
-            return self, params, data
-        _self, _params, _data = test(None)
+        def test(self, params, data, matchdict):
+            return self, params, data, matchdict
+        _self, _params, _data, _matchdict = test(None)
         self.assertIsNone(_self)
         self.assertIsNone(_params)
         self.assertIsNone(_data)
+        self.assertIsNone(_matchdict)
 
 
 if __name__ == '__main__':
