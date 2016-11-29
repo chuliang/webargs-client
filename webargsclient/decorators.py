@@ -16,20 +16,24 @@ def inject_kwargs(argmap, locations=None):
             data = {}
             params = {}
             matchdict = {}
+            json = {}
 
             # dump data to schema
             schema = core.get_schema(argmap)
             result = core.dump(kwargs, schema)
             # for each
-            for name, field in schema.fields.items():
-                value = result.data.get(name)
-                print('', name, value, field.metadata, field)
-                if field.metadata.get('location') == 'json':
-                    data[name] = value
+            for attribute_name, field in schema.fields.items():
+                key = field.dump_to or attribute_name
+                value = result.data.get(key)
+                print('for', attribute_name, key, value, field.metadata, field)
+                if field.metadata.get('location') == 'form':
+                    data[key] = value
+                elif field.metadata.get('location') == 'json':
+                    json[key] = value
                 elif field.metadata.get('location') == 'matchdict':
-                    matchdict[name] = value
+                    matchdict[attribute_name] = value
                 else:
-                    params[name] = value
+                    params[key] = value
 
             if not params:
                 params = None
@@ -37,7 +41,9 @@ def inject_kwargs(argmap, locations=None):
                 data = None
             if not matchdict:
                 matchdict = None
-            return func(self, params=params, data=data, matchdict=matchdict)
+            if not json:
+                json = None
+            return func(self, params=params, data=data, matchdict=matchdict, json=json)
         wrapper.__wrapped__ = func
         return wrapper
     return decorator

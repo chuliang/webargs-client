@@ -8,11 +8,11 @@ from webargsclient import fields
 
 
 class CreateSchema(Schema):
-    title = fields.Str()
+    title = fields.Str(location='json')
 
 
 class UpdateSchema(Schema):
-    title = fields.Str()
+    title = fields.Str(location='json')
     id = fields.Str(location='matchdict')
 
 
@@ -62,22 +62,22 @@ class TestClient(unittest.TestCase):
     def test_example_create(self):
         self.client.make_request = MagicMock(return_value={})
         self.client.create(title='test')
-        self.client.make_request.assert_called_with('POST', route='/users', data=None, params={'title': 'test'}, matchdict=None)
+        self.client.make_request.assert_called_with('POST', route='/users', data=None, params=None, matchdict=None, json={'title': 'test'})
 
     def test_example_update(self):
         self.client.make_request = MagicMock(return_value={})
         self.client.update(id="test_1", title='test1')
-        self.client.make_request.assert_called_with('PUT', route='/users/test_1', data=None, params={'title': 'test1'}, matchdict={'id': 'test_1'})
+        self.client.make_request.assert_called_with('PUT', route='/users/test_1', data=None, params=None, matchdict={'id': 'test_1'}, json={'title': 'test1'})
 
     def test_example_get(self):
         self.client.make_request = MagicMock(return_value={})
         self.client.get(id="test_1")
-        self.client.make_request.assert_called_with('GET', route='/users/test_1', data=None, params=None, matchdict={'id': 'test_1'})
+        self.client.make_request.assert_called_with('GET', route='/users/test_1', data=None, params=None, matchdict={'id': 'test_1'}, json=None)
 
     def test_example_delete(self):
         self.client.make_request = MagicMock(return_value={})
         self.client.delete(id="test_1")
-        self.client.make_request.assert_called_with('DELETE', route='/users/test_1', data=None, params=None, matchdict={'id': 'test_1'})
+        self.client.make_request.assert_called_with('DELETE', route='/users/test_1', data=None, params=None, matchdict={'id': 'test_1'}, json=None)
 
 
 if __name__ == '__main__':

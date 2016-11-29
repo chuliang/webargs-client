@@ -9,7 +9,7 @@ from webargsclient import fields
 class Example(Client):
 
     @decorators.inject_kwargs({
-        'title': fields.Str()
+        'title': fields.Str(location='json')
     })
     @decorators.inject_route('/users')
     def create(self, *args, **kwargs):
@@ -18,7 +18,7 @@ class Example(Client):
 
     @decorators.inject_kwargs({
         'id': fields.Str(location='matchdict'),
-        'title': fields.Str()
+        'title': fields.Str(location='json')
     })
     @decorators.inject_route('/users/{id}')
     def update(self, *args, **kwargs):
@@ -53,22 +53,22 @@ class TestClient(unittest.TestCase):
     def test_example_create(self):
         self.client.make_request = MagicMock(return_value={})
         self.client.create(title='test')
-        self.client.make_request.assert_called_with('POST', route='/users', data=None, params={'title': 'test'}, matchdict=None)
+        self.client.make_request.assert_called_with('POST', route='/users', data=None, params=None, matchdict=None, json={'title': 'test'})
 
     def test_example_update(self):
         self.client.make_request = MagicMock(return_value={})
         self.client.update(id="test_1", title='test1')
-        self.client.make_request.assert_called_with('PUT', route='/users/test_1', data=None, params={'title': 'test1'}, matchdict={'id': 'test_1'})
+        self.client.make_request.assert_called_with('PUT', route='/users/test_1', data=None, params=None, matchdict={'id': 'test_1'}, json={'title': 'test1'})
 
     def test_example_get(self):
         self.client.make_request = MagicMock(return_value={})
         self.client.get(id="test_1")
-        self.client.make_request.assert_called_with('GET', route='/users/test_1', data=None, params=None, matchdict={'id': 'test_1'})
+        self.client.make_request.assert_called_with('GET', route='/users/test_1', data=None, params=None, matchdict={'id': 'test_1'}, json=None)
 
     def test_example_delete(self):
         self.client.make_request = MagicMock(return_value={})
         self.client.delete(id="test_1")
-        self.client.make_request.assert_called_with('DELETE', route='/users/test_1', data=None, params=None, matchdict={'id': 'test_1'})
+        self.client.make_request.assert_called_with('DELETE', route='/users/test_1', data=None, params=None, matchdict={'id': 'test_1'}, json=None)
 
 
 if __name__ == '__main__':

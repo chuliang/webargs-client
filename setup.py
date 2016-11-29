@@ -9,9 +9,9 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
     CHANGES = f.read()
 
 requires = [
-    'webargs',
-    'marshmallow',
-    'requests'
+    'webargs>=1.5.0',
+    'marshmallow>=2.10.3',
+    'requests>=2.4.2',
 ]
 
 
